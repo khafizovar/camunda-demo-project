@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<bpmn:definitions xmlns:bpmn="http://www.omg.org/spec/BPMN/20100524/MODEL" xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" xmlns:dc="http://www.omg.org/spec/DD/20100524/DC" xmlns:di="http://www.omg.org/spec/DD/20100524/DI" xmlns:camunda="http://camunda.org/schema/1.0/bpmn" id="Definitions_0fr9mxs" targetNamespace="http://bpmn.io/schema/bpmn" exporter="Camunda Modeler" exporterVersion="4.12.0">
+  <bpmn:process id="poc-camunda-process" name="Lafayette" isExecutable="true">
+    <bpmn:startEvent id="StartEvent_1" name="Lafayette want to be involved in a Revolution">
+      <bpmn:outgoing>SequenceFlow_1fp17al</bpmn:outgoing>
+    </bpmn:startEvent>
+    <bpmn:sequenceFlow id="SequenceFlow_1fp17al" sourceRef="StartEvent_1" targetRef="say-hello" />
+    <bpmn:userTask id="say-hello" name="Prepared for Departure" camunda:formKey="camunda-forms:/forms/preparedfordeparture.form" camunda:candidateUsers="admin">
+      <bpmn:incoming>SequenceFlow_1fp17al</bpmn:incoming>
+      <bpmn:outgoing>Flow_04n69uo</bpmn:outgoing>
+    </bpmn:userTask>
+    <bpmn:sequenceFlow id="Flow_04n69uo" sourceRef="say-hello" targetRef="Activity_0tpwu8l" />
+    <bpmn:userTask id="Activity_0tpwu8l" name="Get a taxi" camunda:formKey="camunda-forms:/forms/getTaxi.form">
+      <bpmn:incoming>Flow_04n69uo</bpmn:incoming>
+      <bpmn:outgoing>Flow_0c5e2nq</bpmn:outgoing>
+    </bpmn:userTask>
+    <bpmn:sequenceFlow id="Flow_0c5e2nq" sourceRef="Activity_0tpwu8l" targetRef="Activity_1v8fhcq" />
+    <bpmn:userTask id="Activity_1v8fhcq" name="Overthrow the monarchy">
+      <bpmn:incoming>Flow_0c5e2nq</bpmn:incoming>
+      <bpmn:outgoing>Flow_0l4o15r</bpmn:outgoing>
+    </bpmn:userTask>
+    <bpmn:endEvent id="Event_1c3mw1k" name="Lafayette has helped a revolution">
+      <bpmn:incoming>Flow_0l4o15r</bpmn:incoming>
+    </bpmn:endEvent>
+    <bpmn:sequenceFlow id="Flow_0l4o15r" sourceRef="Activity_1v8fhcq" targetRef="Event_1c3mw1k" />
+  </bpmn:process>
+  <bpmndi:BPMNDiagram id="BPMNDiagram_1">
+    <bpmndi:BPMNPlane id="BPMNPlane_1" bpmnElement="poc-camunda-process">
+      <bpmndi:BPMNEdge id="Flow_0l4o15r_di" bpmnElement="Flow_0l4o15r">
+        <di:waypoint x="690" y="117" />
+        <di:waypoint x="752" y="117" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_0c5e2nq_di" bpmnElement="Flow_0c5e2nq">
+        <di:waypoint x="530" y="117" />
+        <di:waypoint x="590" y="117" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_04n69uo_di" bpmnElement="Flow_04n69uo">
+        <di:waypoint x="370" y="117" />
+        <di:waypoint x="430" y="117" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="SequenceFlow_1fp17al_di" bpmnElement="SequenceFlow_1fp17al">
+        <di:waypoint x="215" y="117" />
+        <di:waypoint x="270" y="117" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNShape id="_BPMNShape_StartEvent_2" bpmnElement="StartEvent_1">
+        <dc:Bounds x="179" y="99" width="36" height="36" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="155" y="142" width="85" height="40" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="UserTask_08mft2c_di" bpmnElement="say-hello">
+        <dc:Bounds x="270" y="77" width="100" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Activity_1pxiapg_di" bpmnElement="Activity_0tpwu8l">
+        <dc:Bounds x="430" y="77" width="100" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Activity_1m5dqaw_di" bpmnElement="Activity_1v8fhcq">
+        <dc:Bounds x="590" y="77" width="100" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Event_1c3mw1k_di" bpmnElement="Event_1c3mw1k">
+        <dc:Bounds x="752" y="99" width="36" height="36" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="737" y="142" width="67" height="40" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+    </bpmndi:BPMNPlane>
+  </bpmndi:BPMNDiagram>
+</bpmn:definitions>
