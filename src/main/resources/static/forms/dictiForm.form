@@ -1,0 +1,67 @@
+{
+  "schemaVersion": 2,
+  "components": [
+    {
+      "label": "Аббревиатура",
+      "type": "textfield",
+      "id": "Field_1m6g4vi",
+      "key": "аббревиатура",
+      "validate": {
+        "required": true
+      }
+    },
+    {
+      "label": "Краткое наименование",
+      "type": "textfield",
+      "id": "Field_1a0gkbu",
+      "key": "краткое_наименование",
+      "validate": {
+        "required": true
+      }
+    },
+    {
+      "label": "Наименование",
+      "type": "textfield",
+      "id": "Field_0umwpde",
+      "key": "наименование",
+      "validate": {
+        "required": true
+      }
+    },
+    {
+      "label": "Вступление в силу дата (YYYY-MM-DD HH:mm:SS)",
+      "type": "textfield",
+      "id": "Field_0im6lsy",
+      "key": "вступление_в_силу_дата"
+    },
+    {
+      "label": "Истечение срока дата (YYYY-MM-DD HH:mm:SS)",
+      "type": "textfield",
+      "id": "Field_1v5dsq3",
+      "key": "истечение_срока_дата"
+    },
+    {
+      "label": "Источник (91be6af2-5ea1-4eca-818b-c3a4ea0d81c6)",
+      "type": "textfield",
+      "id": "Field_0fmchy5",
+      "key": "источник"
+    },
+    {
+      "label": "Примечание",
+      "type": "textfield",
+      "id": "Field_16q6zzt",
+      "key": "примечание"
+    },
+    {
+      "label": "Наименование таблицы (справочника (спр_система_строка_качество))",
+      "type": "textfield",
+      "id": "Field_1bgmryt",
+      "key": "table_name",
+      "validate": {
+        "required": true
+      }
+    }
+  ],
+  "type": "default",
+  "id": "dictiForm"
+}
