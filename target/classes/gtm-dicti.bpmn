@@ -26,19 +26,21 @@
             <camunda:inputParameter name="url">http://localhost:8082/api/v1/dictionaries/${table_name}/</camunda:inputParameter>
             <camunda:outputParameter name="response">
               <camunda:script scriptFormat="javascript">var system = java.lang.System;
+system.out.println('---------------------1--------------------');
 var resp = connector.getVariable('response');
 var result = S(resp.toString());
 system.out.println('SaveDataResult: '+result);
 var execution = connector.getParentVariableScope();
 
-var obj = JSON.parse(response);
-
-execution.setVariable('активность_индикатор', obj.values[0]['активность_индикатор'])
+system.out.println('---------------------2--------------------');
 if(statusCode !== 200) {
-throw new org.camunda.bpm.engine.delegate.BpmnError("rest_error", "Rest 
-  Status code:" + statusCode);
+  throw new org.camunda.bpm.engine.delegate.BpmnError('rest_error', 'Rest Status code:' + statusCode);
 } else {
   system.out.println('else');
+
+var obj = JSON.parse(response);
+
+execution.setVariable('активность_индикатор', obj.values[0]['активность_индикатор']);
 }</camunda:script>
             </camunda:outputParameter>
             <camunda:outputParameter name="statusCode">${statusCode}</camunda:outputParameter>
@@ -134,7 +136,7 @@ system.out.println('else');
     </bpmn:userTask>
     <bpmn:sequenceFlow id="Flow_0w3wtzr" sourceRef="Activity_1aauvdv" targetRef="Event_1lzyeak" />
   </bpmn:process>
-  <bpmn:error id="Error_0mfpkmo" name="Error from REST" errorCode="Error from REST" />
+  <bpmn:error id="Error_0mfpkmo" name="rest_error" errorCode="rest_error" />
   <bpmndi:BPMNDiagram id="BPMNDiagram_1">
     <bpmndi:BPMNPlane id="BPMNPlane_1" bpmnElement="save-dictionary-process">
       <bpmndi:BPMNEdge id="Flow_1bvc2gu_di" bpmnElement="Flow_1bvc2gu">
