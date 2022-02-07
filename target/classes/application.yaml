@@ -1,4 +1,4 @@
-spring.datasource.url: jdbc:h2:file:./camunda-h2-database
+#spring.datasource.url: jdbc:h2:file:./camunda-h2-database
 
 camunda.bpm:
   admin-user:
@@ -10,3 +10,19 @@ camunda.bpm:
     - classpath*:**/*.dmn
     - classpath*:**/*.dmn11.xml
     - classpath*:**/*.form
+  database:
+      type: postgres
+
+spring:
+  main:
+    allow-bean-definition-overriding: true
+  jpa:
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.PostgreSQLDialect
+  datasource:
+    driverClassName: org.postgresql.Driver
+    #DB connection:
+    url: jdbc:postgresql://localhost:5432/temp_base
+    username: postgres
+    password: postgres
