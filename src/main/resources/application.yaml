@@ -1,9 +1,9 @@
 #spring.datasource.url: jdbc:h2:file:./camunda-h2-database
 
 camunda.bpm:
-  admin-user:
-    id: admin
-    password: admin
+#  admin-user:
+#    id: admin
+#    password: admin
   deployment-resource-pattern:
     - classpath*:**/*.bpmn
     - classpath*:**/*.bpmn20.xml
@@ -13,10 +13,14 @@ camunda.bpm:
   database:
       type: postgres
 
+server:
+  port: '8083'
 spring:
   main:
     allow-bean-definition-overriding: true
   jpa:
+    hibernate:
+      ddl-auto: update
     properties:
       hibernate:
         dialect: org.hibernate.dialect.PostgreSQLDialect
