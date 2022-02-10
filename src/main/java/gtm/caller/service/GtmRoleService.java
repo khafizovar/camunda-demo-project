@@ -21,8 +21,8 @@ public class GtmRoleService {
     /** jwt token активной сессии */
     private String jwtToken;
 
-    private String uname = "admin";
-    private String pwd = "Qwerty123";
+    private String uname = "testuser";
+    private String pwd = "testuser";
 
     private String authSignInUrl = "http://localhost:8080/api/auth/signin";
 
