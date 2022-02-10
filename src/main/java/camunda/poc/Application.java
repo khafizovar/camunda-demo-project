@@ -8,7 +8,7 @@ import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 import org.springframework.web.filter.CorsFilter;
 
-@SpringBootApplication
+@SpringBootApplication(scanBasePackages={"camunda.poc", "gtm.caller"})
 public class Application {
   public static void main(String... args) {
     SpringApplication.run(Application.class, args);
