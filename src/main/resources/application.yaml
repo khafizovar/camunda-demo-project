@@ -12,7 +12,6 @@ camunda.bpm:
     - classpath*:**/*.form
   database:
       type: postgres
-
 server:
   port: '8083'
 spring:
@@ -30,3 +29,8 @@ spring:
     url: jdbc:postgresql://localhost:5432/temp_base
     username: postgres
     password: postgres
+camunda:
+  bpm:
+    authorization:
+      enabled: false
+      tenant-check-enabled: false

@@ -1,36 +1,37 @@
 package gtm.caller.service;
 
+import camunda.poc.domain.Group;
 import gtm.caller.dto.RoleDto;
-import gtm.caller.request.SignInRequest;
-import gtm.caller.response.SignInResponse;
+import gtm.caller.dto.UserDto;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.Scope;
 import org.springframework.http.*;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
+import java.util.Arrays;
+import java.util.Collection;
 import java.util.Collections;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 /**
  * Created by ai.khafizov
- * on 09.02.2022
+ * on 11.02.2022
  */
 @Service
-public class GtmRoleService {
-
+public class GtmUserService {
     @Autowired
     private GtmAuthService authService;
 
-    private String rolesContainerUrl = "http://localhost:8080/api/v1/roles/";
+    private String usersContainerUrl = "http://localhost:8080/api/v1/ldap/users";
 
     /**
      * Получить список ролей
      *
      * @return
      */
-    public RoleDto[] getRoles() {
-        return (RoleDto[]) this.makeRequest(rolesContainerUrl, HttpMethod.GET, RoleDto[].class).getBody();
+    public UserDto[] getUsers() {
+        return (UserDto[]) this.makeRequest(usersContainerUrl, HttpMethod.GET, UserDto[].class).getBody();
     }
 
     /**

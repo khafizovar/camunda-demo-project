@@ -2,7 +2,6 @@ package gtm.caller.mapper;
 
 import camunda.poc.domain.Group;
 import gtm.caller.dto.RoleDto;
-import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
 
 /**
@@ -18,7 +17,7 @@ public class GroupFacade {
      */
     public Group roleToGroup(RoleDto roleDto) {
         Group gr = new Group();
-        gr.setId(roleDto.getGroupDn());
+        gr.setId(roleDto.getName());
         gr.setName(roleDto.getName());
         gr.setType("SYSTEM");
         return gr;

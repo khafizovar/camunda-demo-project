@@ -1,7 +1,6 @@
 package camunda.poc.service;
 
 import camunda.poc.domain.Group;
-import camunda.poc.domain.GroupRepository;
 import gtm.caller.mapper.GroupFacade;
 import gtm.caller.service.GtmRoleService;
 import org.apache.commons.lang3.NotImplementedException;
@@ -19,7 +18,7 @@ import java.util.stream.Collectors;
 @Service
 @Transactional
 @Qualifier("GServiceGTM")
-public class GtmGroupService implements GService {
+public class CamGtmGroupService implements GService {
 
     @Autowired
     private GtmRoleService gtmRoleService;

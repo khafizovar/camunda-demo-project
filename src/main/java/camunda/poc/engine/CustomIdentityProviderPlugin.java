@@ -1,8 +1,8 @@
 package camunda.poc.engine;
 
 import camunda.poc.engine.idservice.CustomIdentityProviderFactory;
-import camunda.poc.service.GtmGroupService;
-import camunda.poc.service.GtmUserService;
+import camunda.poc.service.GService;
+import camunda.poc.service.UService;
 import org.camunda.bpm.engine.ProcessEngine;
 import org.camunda.bpm.engine.impl.cfg.ProcessEngineConfigurationImpl;
 import org.camunda.bpm.engine.impl.cfg.ProcessEnginePlugin;
@@ -13,13 +13,13 @@ import org.springframework.stereotype.Component;
 @Component
 public class CustomIdentityProviderPlugin implements ProcessEnginePlugin {
 
-    private final GtmUserService userService;
+    private final UService userService;
 
-    private final GtmGroupService groupService;
+    private final GService groupService;
 
     @Autowired
-    public CustomIdentityProviderPlugin(@Qualifier("UServiceGTM") GtmUserService userService,
-                                        @Qualifier("GServiceGTM") GtmGroupService groupService) {
+    public CustomIdentityProviderPlugin(@Qualifier("UServiceGTM") UService userService,
+                                        @Qualifier("GServiceGTM") GService groupService) {
         this.userService = userService;
         this.groupService = groupService;
     }

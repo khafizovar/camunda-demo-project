@@ -13,7 +13,7 @@ import java.util.Optional;
 @Service
 @Transactional
 @Qualifier("UServiceDB")
-public class UserService {
+public class UserService implements UService {
 
     private final UserRepository repository;
 
