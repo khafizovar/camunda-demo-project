@@ -22,18 +22,24 @@ public class CamGtmUserService implements UService {
     private gtm.caller.service.GtmUserService gtmUserService;
 
     @Autowired
+    private gtm.caller.service.GtmRoleService gtmRoleService;
+
+    @Autowired
     private UserFacade userFacade;
 
     public Optional<User> findById(String id) {
-        return this.getUsers().stream().filter(item -> item.getId().equals(id)).findFirst();
+        return Optional.of(userFacade.userDtoToUser(this.gtmUserService.getUser(id), gtmRoleService.getRolesByUserName(id)));
+    }
+
+    public Collection<User> findByGroupDn(String groupDn) {
+        return Arrays.stream(this.gtmUserService.getUsersByGroupDn(groupDn)).map(userFacade::userDtoToUser).collect(Collectors.toList());
     }
 
     public Collection<User> findAll() {
-        return (Collection<User>) this.getUsers();
+        return this.getUsers();
     }
 
     public User save(User user) {
-        // return repository.save(user);
         throw new RuntimeException("You can not create users because this service implementation is in on read-only mode");
     }
 

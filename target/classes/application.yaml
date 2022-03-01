@@ -32,5 +32,11 @@ spring:
 camunda:
   bpm:
     authorization:
-      enabled: false
+      enabled: true
       tenant-check-enabled: false
+  run:
+    auth:
+      enabled: true
+#  generic-properties:
+#    properties:
+#      default-user-permission-name-for-task: TASK_WORK

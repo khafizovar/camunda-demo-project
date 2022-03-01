@@ -24,4 +24,6 @@ public class Group implements org.camunda.bpm.engine.identity.Group {
 
     @Column(name = "`type`")
     private String type;
+
+    private String dn;
 }

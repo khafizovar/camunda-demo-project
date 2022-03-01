@@ -57,9 +57,15 @@ public class CustomIdentityProvider implements ReadOnlyIdentityProvider {
     }
 
     public List<User> findUserByQueryCriteria(CustomUserQuery query) {
-
         Collection<camunda.poc.domain.User> users = userService.findAll();
 
+        if (query.getGroupId() != null) {
+            List<User> us = new ArrayList<>(userService.findByGroupDn(this.groupService.findById(query.getGroupId()).get().getDn()));
+            if(query.getId() != null) {
+                us.removeIf(user -> !user.getId().equals(query.getId()));
+            }
+            return us;
+        }
         if (query.getId() != null)
             users.removeIf(user -> !user.getId().equals(query.getId()));
         if (query.getFirstName() != null)
@@ -68,20 +74,8 @@ public class CustomIdentityProvider implements ReadOnlyIdentityProvider {
             users.removeIf(user -> !user.getLastName().equals(query.getLastName()));
         if (query.getEmail() != null)
             users.removeIf(user -> !user.getEmail().equals(query.getEmail()));
-        if (query.getGroupId() != null)
-            users.removeIf(user -> !user.getGroup().getId().equals(query.getGroupId()));
 
         return new ArrayList<>(users);
-
-//        return userService.findAll().stream()
-//                .filter(user -> user.getId().equals(query.getId()))
-//                .filter(user -> user.getFirstName().equals(query.getFirstName()))
-//                .filter(user -> user.getLastName().equals(query.getLastName()))
-//                .filter(user -> user.getEmail().equals(query.getEmail()))
-//                .filter(user -> user.getGroup().getId().equals(query.getGroupId()))
-//                .collect(Collectors.toList());
-
-//        return Collections.emptyList();
     }
 
     @Override
@@ -97,8 +91,6 @@ public class CustomIdentityProvider implements ReadOnlyIdentityProvider {
 
         return user.getPassword().equals(password);
     }
-
-    // Group //////////////////////////////////////////
 
     @Override
     public Group findGroupById(String groupId) {
@@ -121,16 +113,15 @@ public class CustomIdentityProvider implements ReadOnlyIdentityProvider {
 
     public List<Group> findGroupByQueryCriteria(CustomGroupQuery query) {
 
+        if (query.getUserId() != null) {
+            return new ArrayList<>(groupService.findAllByUserId(query.getUserId()));
+        }
         return groupService.findAll().stream()
                 .filter(group -> query.getId() == null || group.getId().equals(query.getId()))
                 .filter(group -> query.getName() == null || group.getName().equals(query.getName()))
                 .filter(group -> query.getType() == null || group.getType().equals(query.getType()))
                 .collect(Collectors.toList());
-
-//        return Collections.emptyList();
     }
-
-    // Tenant ////////////////////////////////////////
 
     @Override
     public Tenant findTenantById(String tenantId) {

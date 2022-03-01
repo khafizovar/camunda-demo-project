@@ -39,6 +39,13 @@ public class CamGtmGroupService implements GService {
         throw new NotImplementedException("read only mode!");
     }
 
+    @Override
+    public Collection<Group> findAllByUserId(String userId) {
+        return Arrays.stream(gtmRoleService.getRolesByUserName(userId))
+                .map(groupFacade::roleToGroup)
+                .collect(Collectors.toList());
+    }
+
     /**
      * Получить список групп
      * @return коллекция групп

@@ -19,9 +19,16 @@ public class UserFacade {
      */
     public User userDtoToUser(UserDto userDto) {
         User gr = new User();
-        gr.setId(userDto.getSAMAccountName());
+        gr.setId(userDto.getUsername());
+        gr.setFirstName(userDto.getUsername());
         gr.setEmail(userDto.getEmail());
         gr.setPassword("Qwerty123");
         return gr;
     }
+
+    public User userDtoToUser(UserDto user, RoleDto[] rolesByUserName) {
+        User gr = this.userDtoToUser(user);
+        return gr;
+    }
 }
+

@@ -50,7 +50,7 @@ public class GtmAuthService {
     public String getJwtToken() {
         if(jwtToken == null) {
             this.authorize();
-        } else if(System.currentTimeMillis() - beginDate < dateLive) { //TODO POC просто зашили время жизни токена и презапрашиваем
+        } else if((System.currentTimeMillis() - beginDate) > dateLive) { //TODO POC просто зашили время жизни токена и презапрашиваем
             this.authorize();
         }
         return this.jwtToken;

@@ -1,10 +1,12 @@
 package camunda.poc.engine.idservice;
 
 import org.camunda.bpm.engine.identity.Group;
+import org.camunda.bpm.engine.identity.GroupQuery;
 import org.camunda.bpm.engine.impl.GroupQueryImpl;
 import org.camunda.bpm.engine.impl.Page;
 import org.camunda.bpm.engine.impl.interceptor.CommandContext;
 import org.camunda.bpm.engine.impl.interceptor.CommandExecutor;
+import org.camunda.bpm.engine.impl.util.EnsureUtil;
 
 import java.util.List;
 
@@ -32,6 +34,7 @@ public class CustomGroupQuery extends GroupQueryImpl {
         final CustomIdentityProvider provider = getCustomIdentityProvider(commandContext);
         return provider.findGroupByQueryCriteria(this);
     }
+
 
     protected CustomIdentityProvider getCustomIdentityProvider(CommandContext commandContext) {
         return (CustomIdentityProvider) commandContext.getReadOnlyIdentityProvider();

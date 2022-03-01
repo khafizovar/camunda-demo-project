@@ -20,6 +20,7 @@ public class GroupFacade {
         gr.setId(roleDto.getName());
         gr.setName(roleDto.getName());
         gr.setType("SYSTEM");
+        gr.setDn(roleDto.getGroupDn());
         return gr;
     }
 }

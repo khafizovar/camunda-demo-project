@@ -7,7 +7,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.*;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
+import org.springframework.web.util.UriComponentsBuilder;
 
+import java.net.URLEncoder;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
@@ -26,12 +28,47 @@ public class GtmUserService {
     private String usersContainerUrl = "http://localhost:8080/api/v1/ldap/users";
 
     /**
-     * Получить список ролей
-     *
-     * @return
+     * Получить список пользователей
+     * @return Список пользователей
      */
     public UserDto[] getUsers() {
         return (UserDto[]) this.makeRequest(usersContainerUrl, HttpMethod.GET, UserDto[].class).getBody();
+    }
+
+    /**
+     * Получить пользователя по userName
+     * @param userName логин пользователя
+     * @return Объект пользователя
+     */
+    public UserDto getUser(String userName) {
+        String urlTemplate = UriComponentsBuilder.fromHttpUrl(usersContainerUrl)
+                .queryParam("userName", userName)
+                .encode()
+                .toUriString();
+        UserDto[] list = (UserDto[]) this.makeRequest(urlTemplate, HttpMethod.GET, UserDto[].class).getBody();
+        return (list != null && list.length > 0) ? list[0] : null;
+    }
+
+    /**
+     * Получить пользователя по userName
+     * @param groupDn dn группы
+     * @return Объект пользователя
+     */
+    public UserDto[] getUsersByGroupDn(String groupDn) {
+        try {
+//            String urlTemplate = UriComponentsBuilder.fromHttpUrl(usersContainerUrl)
+//                    .queryParam("groupName", URLEncoder.encode(groupDn, "UTF-8"))
+//                    .toUriString();
+//            String urlTemplate = UriComponentsBuilder.fromHttpUrl(usersContainerUrl).queryParam("groupName", URLEncoder.encode(groupDn, "UTF-8")).build(true).toUri().toString();
+            String urlTemplate = UriComponentsBuilder.
+                    fromHttpUrl(usersContainerUrl).
+                    queryParam("groupName", URLEncoder.encode(groupDn, "UTF-8")).
+                    build(true).toUri().toString();
+            return (UserDto[]) this.makeRequest(urlTemplate, HttpMethod.GET, UserDto[].class).getBody();
+        } catch (Exception ex) {
+            System.out.println(ex.toString());
+        }
+        return new UserDto[0];
     }
 
     /**

@@ -15,4 +15,6 @@ public interface UService {
     Collection<User> findAll();
 
     User save(User user);
+
+    Collection<User> findByGroupDn(String groupDn);
 }

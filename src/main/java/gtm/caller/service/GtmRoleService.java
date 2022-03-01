@@ -1,13 +1,11 @@
 package gtm.caller.service;
 
 import gtm.caller.dto.RoleDto;
-import gtm.caller.request.SignInRequest;
-import gtm.caller.response.SignInResponse;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.Scope;
 import org.springframework.http.*;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
+import org.springframework.web.util.UriComponentsBuilder;
 
 import java.util.Collections;
 import java.util.Map;
@@ -26,12 +24,25 @@ public class GtmRoleService {
 
     /**
      * Получить список ролей
-     *
      * @return
      */
     public RoleDto[] getRoles() {
         return (RoleDto[]) this.makeRequest(rolesContainerUrl, HttpMethod.GET, RoleDto[].class).getBody();
     }
+
+    /**
+     * Получить список ролей пользователя
+     * @return получить список ролей пользователя
+     */
+    public RoleDto[] getRolesByUserName(String userId) {
+        String urlTemplate = UriComponentsBuilder.fromHttpUrl(rolesContainerUrl)
+                .queryParam("userName", userId)
+                .encode()
+                .toUriString();
+        return (RoleDto[]) this.makeRequest(urlTemplate, HttpMethod.GET, RoleDto[].class).getBody();
+    }
+
+
 
     /**
      * Метод формирования запроса.

@@ -2,6 +2,7 @@ package camunda.poc.service;
 
 import camunda.poc.domain.User;
 import camunda.poc.domain.UserRepository;
+import org.apache.commons.lang3.NotImplementedException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
@@ -32,5 +33,10 @@ public class UserService implements UService {
 
     public User save(User user) {
         return repository.save(user);
+    }
+
+    @Override
+    public Collection<User> findByGroupDn(String groupDn) {
+       throw new NotImplementedException();
     }
 }

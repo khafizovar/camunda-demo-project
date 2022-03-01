@@ -15,4 +15,6 @@ public interface GService {
     Collection<Group> findAll();
 
     Group save(Group group);
+
+    Collection<Group> findAllByUserId(String userId);
 }
