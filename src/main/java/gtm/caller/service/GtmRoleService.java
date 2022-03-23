@@ -2,6 +2,7 @@ package gtm.caller.service;
 
 import gtm.caller.dto.RoleDto;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.*;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
@@ -20,7 +21,8 @@ public class GtmRoleService {
     @Autowired
     private GtmAuthService authService;
 
-    private String rolesContainerUrl = "http://localhost:8080/api/v1/roles/";
+    @Value("${gtm.roles.url}")
+    private String rolesContainerUrl;
 
     /**
      * Получить список ролей

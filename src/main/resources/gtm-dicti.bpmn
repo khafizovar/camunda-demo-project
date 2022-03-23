@@ -51,7 +51,7 @@ execution.setVariable('активность_индикатор', obj.values[0]['
       <bpmn:incoming>Flow_1bvc2gu</bpmn:incoming>
       <bpmn:outgoing>Flow_0so9tmq</bpmn:outgoing>
     </bpmn:serviceTask>
-    <bpmn:sequenceFlow id="Flow_0so9tmq" sourceRef="Activity_0e6t4rv" targetRef="Activity_0a4hwlo" />
+    <bpmn:sequenceFlow id="Flow_0so9tmq" sourceRef="Activity_0e6t4rv" targetRef="Activity_0k4pgyz" />
     <bpmn:boundaryEvent id="Event_1aifnsh" attachedToRef="Activity_0e6t4rv">
       <bpmn:outgoing>Flow_11302qk</bpmn:outgoing>
       <bpmn:errorEventDefinition id="ErrorEventDefinition_1ocp8cl" errorRef="Error_0mfpkmo" camunda:errorMessageVariable="Error_Message" />
@@ -60,18 +60,18 @@ execution.setVariable('активность_индикатор', obj.values[0]['
     <bpmn:endEvent id="Event_1dt4zll" name="Ошибка">
       <bpmn:incoming>Flow_1bxntfu</bpmn:incoming>
     </bpmn:endEvent>
-    <bpmn:userTask id="Activity_1yhle0i" name="Оповещение администратора об ошибке">
+    <bpmn:userTask id="Activity_1yhle0i" name="Оповещение администратора об ошибке" camunda:candidateGroups="ООД Специалист">
       <bpmn:incoming>Flow_11302qk</bpmn:incoming>
       <bpmn:incoming>Flow_01b6lmv</bpmn:incoming>
       <bpmn:outgoing>Flow_1bxntfu</bpmn:outgoing>
     </bpmn:userTask>
     <bpmn:sequenceFlow id="Flow_1bxntfu" sourceRef="Activity_1yhle0i" targetRef="Event_1dt4zll" />
-    <bpmn:userTask id="Activity_0k4pgyz" name="Подтверждение записи как активное" camunda:formKey="camunda-forms:/forms/dictiFormAccept.form" camunda:candidateGroups="РольСправочники1">
-      <bpmn:incoming>Flow_1t1f9g3</bpmn:incoming>
+    <bpmn:userTask id="Activity_0k4pgyz" name="Подтверждение записи как активное" camunda:formKey="camunda-forms:/forms/dictiFormAccept.form" camunda:candidateGroups="ООД Специалист, РольСправочники1">
+      <bpmn:incoming>Flow_0so9tmq</bpmn:incoming>
       <bpmn:outgoing>Flow_0bbvcw7</bpmn:outgoing>
     </bpmn:userTask>
     <bpmn:endEvent id="Event_1lzyeak" name="Успех">
-      <bpmn:incoming>Flow_0w3wtzr</bpmn:incoming>
+      <bpmn:incoming>Flow_1lziwni</bpmn:incoming>
     </bpmn:endEvent>
     <bpmn:sequenceFlow id="Flow_0bbvcw7" sourceRef="Activity_0k4pgyz" targetRef="Gateway_196gcfa" />
     <bpmn:exclusiveGateway id="Gateway_196gcfa" name="Запись подтверждена (чистовик)">
@@ -79,7 +79,7 @@ execution.setVariable('активность_индикатор', obj.values[0]['
       <bpmn:outgoing>Flow_1lziwni</bpmn:outgoing>
       <bpmn:outgoing>Flow_02leupk</bpmn:outgoing>
     </bpmn:exclusiveGateway>
-    <bpmn:sequenceFlow id="Flow_1lziwni" name="Запись активна" sourceRef="Gateway_196gcfa" targetRef="Activity_1aauvdv">
+    <bpmn:sequenceFlow id="Flow_1lziwni" name="Запись активна" sourceRef="Gateway_196gcfa" targetRef="Event_1lzyeak">
       <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">#{активность_индикатор=='Y'}</bpmn:conditionExpression>
     </bpmn:sequenceFlow>
     <bpmn:sequenceFlow id="Flow_02leupk" name="Вернуть на доработку" sourceRef="Gateway_196gcfa" targetRef="Activity_0ipri0v">
@@ -125,28 +125,10 @@ system.out.println('else');
       <bpmn:errorEventDefinition id="ErrorEventDefinition_0pr6f58" errorRef="Error_0mfpkmo" camunda:errorMessageVariable="Error_Message" />
     </bpmn:boundaryEvent>
     <bpmn:sequenceFlow id="Flow_01b6lmv" sourceRef="Event_1h2axt1" targetRef="Activity_1yhle0i" />
-    <bpmn:userTask id="Activity_1aauvdv" name="debug">
-      <bpmn:incoming>Flow_1lziwni</bpmn:incoming>
-      <bpmn:outgoing>Flow_0w3wtzr</bpmn:outgoing>
-    </bpmn:userTask>
-    <bpmn:sequenceFlow id="Flow_0w3wtzr" sourceRef="Activity_1aauvdv" targetRef="Event_1lzyeak" />
-    <bpmn:sequenceFlow id="Flow_1t1f9g3" sourceRef="Activity_0a4hwlo" targetRef="Activity_0k4pgyz" />
-    <bpmn:userTask id="Activity_0a4hwlo" name="debug tool" camunda:candidateGroups="ООД Специалист, РольСправочники1">
-      <bpmn:incoming>Flow_0so9tmq</bpmn:incoming>
-      <bpmn:outgoing>Flow_1t1f9g3</bpmn:outgoing>
-    </bpmn:userTask>
   </bpmn:process>
   <bpmn:error id="Error_0mfpkmo" name="rest_error" errorCode="rest_error" />
   <bpmndi:BPMNDiagram id="BPMNDiagram_1">
     <bpmndi:BPMNPlane id="BPMNPlane_1" bpmnElement="save-dictionary-process">
-      <bpmndi:BPMNEdge id="Flow_1t1f9g3_di" bpmnElement="Flow_1t1f9g3">
-        <di:waypoint x="700" y="260" />
-        <di:waypoint x="800" y="260" />
-      </bpmndi:BPMNEdge>
-      <bpmndi:BPMNEdge id="Flow_0w3wtzr_di" bpmnElement="Flow_0w3wtzr">
-        <di:waypoint x="1440" y="260" />
-        <di:waypoint x="1532" y="260" />
-      </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="Flow_01b6lmv_di" bpmnElement="Flow_01b6lmv">
         <di:waypoint x="1210" y="318" />
         <di:waypoint x="1210" y="420" />
@@ -162,9 +144,9 @@ system.out.println('else');
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="Flow_1lziwni_di" bpmnElement="Flow_1lziwni">
         <di:waypoint x="1025" y="260" />
-        <di:waypoint x="1340" y="260" />
+        <di:waypoint x="1532" y="260" />
         <bpmndi:BPMNLabel>
-          <dc:Bounds x="1039" y="273" width="80" height="14" />
+          <dc:Bounds x="1058" y="273" width="80" height="14" />
         </bpmndi:BPMNLabel>
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="Flow_0bbvcw7_di" bpmnElement="Flow_0bbvcw7">
@@ -182,7 +164,7 @@ system.out.println('else');
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="Flow_0so9tmq_di" bpmnElement="Flow_0so9tmq">
         <di:waypoint x="520" y="260" />
-        <di:waypoint x="600" y="260" />
+        <di:waypoint x="800" y="260" />
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="Flow_1bvc2gu_di" bpmnElement="Flow_1bvc2gu">
         <di:waypoint x="320" y="260" />
@@ -230,12 +212,6 @@ system.out.println('else');
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="Activity_0bjuag2_di" bpmnElement="Activity_0bjuag2">
         <dc:Bounds x="1160" y="220" width="100" height="80" />
-      </bpmndi:BPMNShape>
-      <bpmndi:BPMNShape id="Activity_1aauvdv_di" bpmnElement="Activity_1aauvdv">
-        <dc:Bounds x="1340" y="220" width="100" height="80" />
-      </bpmndi:BPMNShape>
-      <bpmndi:BPMNShape id="Activity_04sp3mr_di" bpmnElement="Activity_0a4hwlo">
-        <dc:Bounds x="600" y="220" width="100" height="80" />
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="Event_1h2axt1_di" bpmnElement="Event_1h2axt1">
         <dc:Bounds x="1192" y="282" width="36" height="36" />

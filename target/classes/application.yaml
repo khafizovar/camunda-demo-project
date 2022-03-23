@@ -40,3 +40,9 @@ camunda:
 #  generic-properties:
 #    properties:
 #      default-user-permission-name-for-task: TASK_WORK
+
+gtm:
+  auth:
+    url: "http://localhost:8080/api/auth/signin"
+  roles:
+    url: "http://localhost:8080/api/v1/roles/"

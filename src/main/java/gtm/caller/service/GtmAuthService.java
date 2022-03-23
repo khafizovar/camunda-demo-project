@@ -2,6 +2,7 @@ package gtm.caller.service;
 
 import gtm.caller.request.SignInRequest;
 import gtm.caller.response.SignInResponse;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Scope;
 import org.springframework.http.HttpEntity;
 import org.springframework.stereotype.Service;
@@ -25,7 +26,8 @@ public class GtmAuthService {
     private String uname = "admin";
     private String pwd = "Qwerty123";
 
-    private String authSignInUrl = "http://localhost:8080/api/auth/signin";
+    @Value("${gtm.auth.url}")
+    private String authSignInUrl;
 
     private Long beginDate;
     private Long dateLive = Long.valueOf(25 * 60 * 1000);
