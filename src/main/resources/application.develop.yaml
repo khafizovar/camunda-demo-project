@@ -1,0 +1,29 @@
+jpa:
+  hibernate:
+    ddl-auto: update
+  properties:
+    hibernate:
+      dialect: org.hibernate.dialect.PostgreSQLDialect
+datasource:
+  driverClassName: org.postgresql.Driver
+  #DB connection:
+  url: jdbc:postgresql://localhost:5432/temp_base
+  username: postgres
+  password: postgres
+camunda:
+  bpm:
+    authorization:
+      enabled: true
+      tenant-check-enabled: false
+  run:
+    auth:
+      enabled: true
+#  generic-properties:
+#    properties:
+#      default-user-permission-name-for-task: TASK_WORK
+
+gtm:
+  auth:
+    url: "http://10.1.10.14:30036/api/auth/signin"
+  roles:
+    url: "http://10.1.10.14:30036/api/v1/roles/"
