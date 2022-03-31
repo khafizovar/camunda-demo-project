@@ -1,9 +1,9 @@
-FROM maven:3-openjdk-8 AS build
+FROM maven:3-openjdk-11 AS build
 WORKDIR /app
 COPY . .
 RUN mvn clean package -DskipTests
 
-FROM openjdk:8-jdk-alpine
+FROM openjdk:11-jdk-slim
 ENV ENVIRONMENT=""
 COPY --from=build /app/gtm-basis/target/*.jar /app.jar
 EXPOSE 8080
