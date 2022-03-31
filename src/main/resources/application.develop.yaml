@@ -8,8 +8,8 @@ datasource:
   driverClassName: org.postgresql.Driver
   #DB connection:
   url: jdbc:postgresql://10.1.10.17:5432/cam_develop
-  username: gtm_admin_develop
-  password: gtm_admin_develop_password
+  username: postgres
+  password: h378Kj3e7pgN467f
 camunda:
   bpm:
     authorization:
