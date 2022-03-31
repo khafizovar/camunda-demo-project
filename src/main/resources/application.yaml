@@ -46,3 +46,5 @@ gtm:
     url: "http://localhost:8080/api/auth/signin"
   roles:
     url: "http://localhost:8080/api/v1/roles/"
+  users:
+    url: "http://localhost:8080/api/v1/ldap/users"

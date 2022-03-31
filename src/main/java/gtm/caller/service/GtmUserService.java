@@ -1,20 +1,16 @@
 package gtm.caller.service;
 
-import camunda.poc.domain.Group;
-import gtm.caller.dto.RoleDto;
 import gtm.caller.dto.UserDto;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.*;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.util.UriComponentsBuilder;
 
 import java.net.URLEncoder;
-import java.util.Arrays;
-import java.util.Collection;
 import java.util.Collections;
 import java.util.Map;
-import java.util.stream.Collectors;
 
 /**
  * Created by ai.khafizov
@@ -25,7 +21,8 @@ public class GtmUserService {
     @Autowired
     private GtmAuthService authService;
 
-    private String usersContainerUrl = "http://localhost:8080/api/v1/ldap/users";
+    @Value("${gtm.users.url}")
+    private String usersContainerUrl;
 
     /**
      * Получить список пользователей
