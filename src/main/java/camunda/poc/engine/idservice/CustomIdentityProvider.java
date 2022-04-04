@@ -1,15 +1,12 @@
 package camunda.poc.engine.idservice;
 
 import camunda.poc.service.GService;
-import camunda.poc.service.GroupService;
 import camunda.poc.service.UService;
-import camunda.poc.service.UserService;
 import org.camunda.bpm.engine.BadUserRequestException;
 import org.camunda.bpm.engine.identity.*;
 import org.camunda.bpm.engine.impl.context.Context;
 import org.camunda.bpm.engine.impl.identity.ReadOnlyIdentityProvider;
 import org.camunda.bpm.engine.impl.interceptor.CommandContext;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -24,7 +21,6 @@ public class CustomIdentityProvider implements ReadOnlyIdentityProvider {
 
     private GService groupService;
 
-    @Autowired
     public CustomIdentityProvider(UService userService, GService groupService) {
         this.userService = userService;
         this.groupService = groupService;
@@ -57,10 +53,10 @@ public class CustomIdentityProvider implements ReadOnlyIdentityProvider {
     }
 
     public List<User> findUserByQueryCriteria(CustomUserQuery query) {
-        Collection<camunda.poc.domain.User> users = userService.findAll();
+        Collection<camunda.poc.domain.User> users = this.userService.findAll();
 
         if (query.getGroupId() != null) {
-            List<User> us = new ArrayList<>(userService.findByGroupDn(this.groupService.findById(query.getGroupId()).get().getDn()));
+            List<User> us = new ArrayList<>(this.userService.findByGroupDn(this.groupService.findById(query.getGroupId()).get().getDn()));
             if(query.getId() != null) {
                 us.removeIf(user -> !user.getId().equals(query.getId()));
             }
