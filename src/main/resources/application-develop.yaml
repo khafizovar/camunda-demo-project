@@ -30,7 +30,7 @@ spring:
 camunda:
   bpm:
     authorization:
-      enabled: false
+      enabled: true
       tenant-check-enabled: false
   run:
     auth:
