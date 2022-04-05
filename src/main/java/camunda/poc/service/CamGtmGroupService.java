@@ -29,7 +29,10 @@ public class CamGtmGroupService implements GService {
 
 
     public Optional<Group> findById(String id) {
-        return this.getRoles().stream().filter(item -> item.getDn().toLowerCase(Locale.ROOT).startsWith("cn=" + id.toLowerCase())).findFirst();
+        return this.getRoles().stream().filter(item -> {
+                    return item.getDn().equalsIgnoreCase(id);
+                }
+        ).findFirst();
     }
 
     public Collection<Group> findAll() {
