@@ -5,7 +5,7 @@
       <bpmn:outgoing>Flow_0j8tlz1</bpmn:outgoing>
     </bpmn:startEvent>
     <bpmn:sequenceFlow id="Flow_0j8tlz1" sourceRef="StartEvent_1" targetRef="Activity_0ipri0v" />
-    <bpmn:userTask id="Activity_0ipri0v" name="Заполнение формы записи справочника" camunda:formKey="camunda-forms:/forms/dictiForm.form" camunda:candidateGroups="camunda_group_2">
+    <bpmn:userTask id="Activity_0ipri0v" name="Заполнение формы записи справочника" camunda:formKey="camunda-forms:/forms/dictiForm.form" camunda:candidateGroups="CN=camunda_group_2;CN=Users;DC=cnt-gtm;DC=inno">
       <bpmn:incoming>Flow_0j8tlz1</bpmn:incoming>
       <bpmn:incoming>Flow_02leupk</bpmn:incoming>
       <bpmn:outgoing>Flow_1bvc2gu</bpmn:outgoing>
@@ -23,7 +23,9 @@
               </camunda:map>
             </camunda:inputParameter>
             <camunda:inputParameter name="method">POST</camunda:inputParameter>
-            <camunda:inputParameter name="url">http://10.1.10.14:30039/api/v1/dictionaries/${table_name}/</camunda:inputParameter>
+            <camunda:inputParameter name="url">
+
+http://gtm-dictionaries-back:8082/api/v1/dictionaries/${table_name}/</camunda:inputParameter>
             <camunda:outputParameter name="response">
               <camunda:script scriptFormat="javascript">var system = java.lang.System;
 system.out.println('---------------------1--------------------');
@@ -59,7 +61,7 @@ execution.setVariable('активность_индикатор', obj.values[0]['
     <bpmn:endEvent id="Event_1dt4zll" name="Ошибка">
       <bpmn:incoming>Flow_007xnew</bpmn:incoming>
     </bpmn:endEvent>
-    <bpmn:userTask id="Activity_0k4pgyz" name="Подтверждение записи как активное" camunda:formKey="camunda-forms:/forms/dictiFormAccept.form" camunda:candidateGroups="camunda_group_1">
+    <bpmn:userTask id="Activity_0k4pgyz" name="Подтверждение записи как активное" camunda:formKey="camunda-forms:/forms/dictiFormAccept.form" camunda:candidateGroups="CN=camunda_group_1;CN=Users;DC=cnt-gtm;DC=inno">
       <bpmn:incoming>Flow_0so9tmq</bpmn:incoming>
       <bpmn:outgoing>Flow_0bbvcw7</bpmn:outgoing>
     </bpmn:userTask>
@@ -69,12 +71,9 @@ execution.setVariable('активность_индикатор', obj.values[0]['
     <bpmn:sequenceFlow id="Flow_0bbvcw7" sourceRef="Activity_0k4pgyz" targetRef="Gateway_196gcfa" />
     <bpmn:exclusiveGateway id="Gateway_196gcfa" name="Запись подтверждена (чистовик)">
       <bpmn:incoming>Flow_0bbvcw7</bpmn:incoming>
-      <bpmn:outgoing>Flow_1lziwni</bpmn:outgoing>
       <bpmn:outgoing>Flow_02leupk</bpmn:outgoing>
+      <bpmn:outgoing>Flow_1auv1ma</bpmn:outgoing>
     </bpmn:exclusiveGateway>
-    <bpmn:sequenceFlow id="Flow_1lziwni" name="Запись активна" sourceRef="Gateway_196gcfa" targetRef="Activity_1qxno0b">
-      <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">#{активность_индикатор=='Y'}</bpmn:conditionExpression>
-    </bpmn:sequenceFlow>
     <bpmn:sequenceFlow id="Flow_02leupk" name="Вернуть на доработку" sourceRef="Gateway_196gcfa" targetRef="Activity_0ipri0v">
       <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">#{активность_индикатор!='Y'}</bpmn:conditionExpression>
     </bpmn:sequenceFlow>
@@ -90,7 +89,7 @@ execution.setVariable('активность_индикатор', obj.values[0]['
               </camunda:map>
             </camunda:inputParameter>
             <camunda:inputParameter name="method">POST</camunda:inputParameter>
-            <camunda:inputParameter name="url">http://10.1.10.14:30039/api/v1/dictionaries/${table_name}/</camunda:inputParameter>
+            <camunda:inputParameter name="url">http://gtm-dictionaries-back:8082/api/v1/dictionaries/${table_name}/</camunda:inputParameter>
             <camunda:outputParameter name="response">
               <camunda:script scriptFormat="javascript">var system = java.lang.System;
 var resp = connector.getVariable('response');
@@ -112,6 +111,8 @@ system.out.println('else');
           <camunda:connectorId>http-connector</camunda:connectorId>
         </camunda:connector>
       </bpmn:extensionElements>
+      <bpmn:incoming>Flow_1auv1ma</bpmn:incoming>
+      <bpmn:outgoing>Flow_0845bmw</bpmn:outgoing>
     </bpmn:serviceTask>
     <bpmn:boundaryEvent id="Event_1h2axt1" attachedToRef="Activity_0bjuag2">
       <bpmn:outgoing>Flow_06bjchc</bpmn:outgoing>
@@ -122,7 +123,7 @@ system.out.println('else');
       <bpmn:extensionElements>
         <camunda:connector>
           <camunda:inputOutput>
-            <camunda:inputParameter name="url">http://10.100.9.81:31516/api/endpoint/TELEGRAM_ALERT_MESSAGE_ESB_BOT_INFO</camunda:inputParameter>
+            <camunda:inputParameter name="url">http://poc-experience-api.gtm-esb-develop.svc.cluster.local.:7092/api/endpoint/TELEGRAM_ALERT_MESSAGE_ESB_BOT_INFO</camunda:inputParameter>
             <camunda:inputParameter name="method">POST</camunda:inputParameter>
             <camunda:inputParameter name="headers">
               <camunda:map>
@@ -130,21 +131,19 @@ system.out.println('else');
                 <camunda:entry key="Content-Type">application/json</camunda:entry>
               </camunda:map>
             </camunda:inputParameter>
-            <camunda:inputParameter name="payload">{
-  "message": "Новая запись ${наименование} установлена как 'активная'. (develop-стенд)"
-}</camunda:inputParameter>
+            <camunda:inputParameter name="payload">{"message":"Новая запись ${наименование} установлена как 'активная'. (develop-стенд)"}</camunda:inputParameter>
           </camunda:inputOutput>
           <camunda:connectorId>http-connector</camunda:connectorId>
         </camunda:connector>
       </bpmn:extensionElements>
-      <bpmn:incoming>Flow_1lziwni</bpmn:incoming>
+      <bpmn:incoming>Flow_0845bmw</bpmn:incoming>
       <bpmn:outgoing>Flow_0mtsgtf</bpmn:outgoing>
     </bpmn:serviceTask>
     <bpmn:serviceTask id="Activity_0msys0b" name="telegram-error-notification">
       <bpmn:extensionElements>
         <camunda:connector>
           <camunda:inputOutput>
-            <camunda:inputParameter name="url">http://10.100.9.81:31516/api/endpoint/TELEGRAM_ALERT_MESSAGE_ESB_BOT_INFO</camunda:inputParameter>
+            <camunda:inputParameter name="url">http://poc-experience-api.svc.gtm-esb-develop.cluster.local.:8088/api/endpoint/TELEGRAM_ALERT_MESSAGE_ESB_BOT_INFO</camunda:inputParameter>
             <camunda:inputParameter name="method">POST</camunda:inputParameter>
             <camunda:inputParameter name="headers">
               <camunda:map>
@@ -171,12 +170,14 @@ system.out.println('else');
       <bpmn:incoming>Flow_01e65se</bpmn:incoming>
       <bpmn:outgoing>Flow_0gzzj76</bpmn:outgoing>
     </bpmn:userTask>
+    <bpmn:sequenceFlow id="Flow_1auv1ma" sourceRef="Gateway_196gcfa" targetRef="Activity_0bjuag2" />
+    <bpmn:sequenceFlow id="Flow_0845bmw" sourceRef="Activity_0bjuag2" targetRef="Activity_1qxno0b" />
   </bpmn:process>
   <bpmn:error id="Error_0mfpkmo" name="rest_error" errorCode="rest_error" />
   <bpmndi:BPMNDiagram id="BPMNDiagram_1">
     <bpmndi:BPMNPlane id="BPMNPlane_1" bpmnElement="save-dictionary-process">
       <bpmndi:BPMNEdge id="Flow_0mtsgtf_di" bpmnElement="Flow_0mtsgtf">
-        <di:waypoint x="1210" y="260" />
+        <di:waypoint x="1270" y="260" />
         <di:waypoint x="1522" y="260" />
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="Flow_02leupk_di" bpmnElement="Flow_02leupk">
@@ -186,13 +187,6 @@ system.out.println('else');
         <di:waypoint x="270" y="220" />
         <bpmndi:BPMNLabel>
           <dc:Bounds x="731" y="86" width="58" height="27" />
-        </bpmndi:BPMNLabel>
-      </bpmndi:BPMNEdge>
-      <bpmndi:BPMNEdge id="Flow_1lziwni_di" bpmnElement="Flow_1lziwni">
-        <di:waypoint x="825" y="260" />
-        <di:waypoint x="1110" y="260" />
-        <bpmndi:BPMNLabel>
-          <dc:Bounds x="847" y="273" width="80" height="14" />
         </bpmndi:BPMNLabel>
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="Flow_0bbvcw7_di" bpmnElement="Flow_0bbvcw7">
@@ -228,6 +222,14 @@ system.out.println('else');
         <di:waypoint x="470" y="460" />
         <di:waypoint x="910" y="460" />
       </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_1auv1ma_di" bpmnElement="Flow_1auv1ma">
+        <di:waypoint x="825" y="260" />
+        <di:waypoint x="910" y="260" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_0845bmw_di" bpmnElement="Flow_0845bmw">
+        <di:waypoint x="1010" y="260" />
+        <di:waypoint x="1170" y="260" />
+      </bpmndi:BPMNEdge>
       <bpmndi:BPMNShape id="_BPMNShape_StartEvent_2" bpmnElement="StartEvent_1">
         <dc:Bounds x="122" y="242" width="36" height="36" />
         <bpmndi:BPMNLabel>
@@ -261,23 +263,23 @@ system.out.println('else');
           <dc:Bounds x="763" y="292" width="74" height="40" />
         </bpmndi:BPMNLabel>
       </bpmndi:BPMNShape>
-      <bpmndi:BPMNShape id="Activity_0bjuag2_di" bpmnElement="Activity_0bjuag2">
-        <dc:Bounds x="910" y="220" width="100" height="80" />
-      </bpmndi:BPMNShape>
-      <bpmndi:BPMNShape id="Activity_0eajgw5_di" bpmnElement="Activity_1qxno0b">
-        <dc:Bounds x="1110" y="220" width="100" height="80" />
-      </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="Activity_0msys0b_di" bpmnElement="Activity_0msys0b">
         <dc:Bounds x="1070" y="420" width="100" height="80" />
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="Activity_0wqegg6_di" bpmnElement="Activity_1s8ehok">
         <dc:Bounds x="910" y="420" width="100" height="80" />
       </bpmndi:BPMNShape>
-      <bpmndi:BPMNShape id="Event_1h2axt1_di" bpmnElement="Event_1h2axt1">
-        <dc:Bounds x="942" y="282" width="36" height="36" />
+      <bpmndi:BPMNShape id="Activity_0bjuag2_di" bpmnElement="Activity_0bjuag2">
+        <dc:Bounds x="910" y="220" width="100" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Activity_0eajgw5_di" bpmnElement="Activity_1qxno0b">
+        <dc:Bounds x="1170" y="220" width="100" height="80" />
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="Event_1nk0pei_di" bpmnElement="Event_1aifnsh">
         <dc:Bounds x="452" y="282" width="36" height="36" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Event_1h2axt1_di" bpmnElement="Event_1h2axt1">
+        <dc:Bounds x="942" y="282" width="36" height="36" />
       </bpmndi:BPMNShape>
     </bpmndi:BPMNPlane>
   </bpmndi:BPMNDiagram>

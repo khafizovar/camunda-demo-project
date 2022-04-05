@@ -12,6 +12,7 @@ import org.springframework.stereotype.Service;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
@@ -56,11 +57,18 @@ public class CustomIdentityProvider implements ReadOnlyIdentityProvider {
         Collection<camunda.poc.domain.User> users = this.userService.findAll();
 
         if (query.getGroupId() != null) {
-            List<User> us = new ArrayList<>(this.userService.findByGroupDn(this.groupService.findById(query.getGroupId()).get().getDn()));
-            if(query.getId() != null) {
-                us.removeIf(user -> !user.getId().equals(query.getId()));
+            String groupId = (query.getGroupId().toLowerCase().startsWith("cn=")) ? query.getGroupId().replaceAll(";", ",") : query.getGroupId();
+            Optional<camunda.poc.domain.Group> gr = this.groupService.findById(groupId);
+            if(gr.isPresent()) {
+                List<User> us = new ArrayList<>(
+                        this.userService.findByGroupDn(gr.get().getDn()));
+                if (query.getId() != null) {
+                    us.removeIf(user -> !user.getId().equals(query.getId()));
+                }
+                return us;
+            } else {
+                return new ArrayList<>();
             }
-            return us;
         }
         if (query.getId() != null)
             users.removeIf(user -> !user.getId().equals(query.getId()));
