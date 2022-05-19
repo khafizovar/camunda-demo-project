@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <bpmn:definitions xmlns:bpmn="http://www.omg.org/spec/BPMN/20100524/MODEL" xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" xmlns:dc="http://www.omg.org/spec/DD/20100524/DC" xmlns:camunda="http://camunda.org/schema/1.0/bpmn" xmlns:di="http://www.omg.org/spec/DD/20100524/DI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:modeler="http://camunda.org/schema/modeler/1.0" id="Definitions_1mnaiws" targetNamespace="http://bpmn.io/schema/bpmn" exporter="Camunda Modeler" exporterVersion="4.12.0" modeler:executionPlatform="Camunda Platform" modeler:executionPlatformVersion="7.15.0">
-  <bpmn:process id="save-dictionary-process" isExecutable="true">
+  <bpmn:process id="save-dictionary-process" isExecutable="true" camunda:taskPriority="77">
     <bpmn:startEvent id="StartEvent_1" name="Начало">
       <bpmn:outgoing>Flow_0j8tlz1</bpmn:outgoing>
     </bpmn:startEvent>
@@ -11,7 +11,7 @@
       <bpmn:outgoing>Flow_1bvc2gu</bpmn:outgoing>
     </bpmn:userTask>
     <bpmn:sequenceFlow id="Flow_1bvc2gu" sourceRef="Activity_0ipri0v" targetRef="Activity_0e6t4rv" />
-    <bpmn:serviceTask id="Activity_0e6t4rv" name="rest-http-connector">
+    <bpmn:serviceTask id="Activity_0e6t4rv" name="Сохранение черновой записи">
       <bpmn:extensionElements>
         <camunda:connector>
           <camunda:inputOutput>
@@ -23,9 +23,7 @@
               </camunda:map>
             </camunda:inputParameter>
             <camunda:inputParameter name="method">POST</camunda:inputParameter>
-            <camunda:inputParameter name="url">
-
-http://gtm-dictionaries-back:8082/api/v1/dictionaries/${table_name}/</camunda:inputParameter>
+            <camunda:inputParameter name="url">http://gtm-dictionaries-back:8082/api/v1/dictionaries/${table_name}/</camunda:inputParameter>
             <camunda:outputParameter name="response">
               <camunda:script scriptFormat="javascript">var system = java.lang.System;
 system.out.println('---------------------1--------------------');
@@ -43,6 +41,7 @@ if(statusCode !== 200) {
 var obj = JSON.parse(response);
 
 execution.setVariable('активность_индикатор', obj.values[0]['активность_индикатор']);
+execution.setVariable('глобальный_ид', obj.values[0]['глобальный_ид']);
 }</camunda:script>
             </camunda:outputParameter>
             <camunda:outputParameter name="statusCode">${statusCode}</camunda:outputParameter>
@@ -66,7 +65,7 @@ execution.setVariable('активность_индикатор', obj.values[0]['
       <bpmn:outgoing>Flow_0bbvcw7</bpmn:outgoing>
     </bpmn:userTask>
     <bpmn:endEvent id="Event_1lzyeak" name="Успех">
-      <bpmn:incoming>Flow_0mtsgtf</bpmn:incoming>
+      <bpmn:incoming>Flow_1ainlvy</bpmn:incoming>
     </bpmn:endEvent>
     <bpmn:sequenceFlow id="Flow_0bbvcw7" sourceRef="Activity_0k4pgyz" targetRef="Gateway_196gcfa" />
     <bpmn:exclusiveGateway id="Gateway_196gcfa" name="Запись подтверждена (чистовик)">
@@ -77,18 +76,19 @@ execution.setVariable('активность_индикатор', obj.values[0]['
     <bpmn:sequenceFlow id="Flow_02leupk" name="Вернуть на доработку" sourceRef="Gateway_196gcfa" targetRef="Activity_0ipri0v">
       <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">#{активность_индикатор!='Y'}</bpmn:conditionExpression>
     </bpmn:sequenceFlow>
-    <bpmn:serviceTask id="Activity_0bjuag2" name="rest-http-connector">
+    <bpmn:serviceTask id="Activity_0bjuag2" name="Сохранение активной записи">
       <bpmn:extensionElements>
         <camunda:connector>
           <camunda:inputOutput>
-            <camunda:inputParameter name="payload">{"аббревиатура":"${аббревиатура}","краткое_наименование":"${краткое_наименование}","наименование":"${наименование}","вступление_в_силу_дата":"${вступление_в_силу_дата}","истечение_срока_дата":"${истечение_срока_дата}","источник":"${источник}","активность_индикатор":"${активность_индикатор}", "примечание":"${примечание}"}</camunda:inputParameter>
+            <camunda:inputParameter name="payload">{"аббревиатура":"${аббревиатура}","краткое_наименование":"${краткое_наименование}","наименование":"${наименование}","вступление_в_силу_дата":"${вступление_в_силу_дата}","истечение_срока_дата":"${истечение_срока_дата}","источник":"${источник}","активность_индикатор":"${активность_индикатор}", "примечание":"${примечание}",
+"глобальный_ид":"${глобальный_ид}"}</camunda:inputParameter>
             <camunda:inputParameter name="headers">
               <camunda:map>
                 <camunda:entry key="Accept">application/json</camunda:entry>
                 <camunda:entry key="Content-Type">application/json</camunda:entry>
               </camunda:map>
             </camunda:inputParameter>
-            <camunda:inputParameter name="method">POST</camunda:inputParameter>
+            <camunda:inputParameter name="method">PUT</camunda:inputParameter>
             <camunda:inputParameter name="url">http://gtm-dictionaries-back:8082/api/v1/dictionaries/${table_name}/</camunda:inputParameter>
             <camunda:outputParameter name="response">
               <camunda:script scriptFormat="javascript">var system = java.lang.System;
@@ -97,14 +97,7 @@ var result = S(resp.toString());
 system.out.println('SaveDataResult: '+result);
 var execution = connector.getParentVariableScope();
 
-var obj = JSON.parse(response);
-
-execution.setVariable('активность_индикатор', obj.values[0]['активность_индикатор'])
-if(statusCode !== 200) {
-throw new org.camunda.bpm.engine.delegate.BpmnError("rest_error", "Rest Status code:" + statusCode);
-} else {
-system.out.println('else');
-}</camunda:script>
+system.out.println('responce: '+resp );</camunda:script>
             </camunda:outputParameter>
             <camunda:outputParameter name="statusCode">${statusCode}</camunda:outputParameter>
           </camunda:inputOutput>
@@ -118,32 +111,11 @@ system.out.println('else');
       <bpmn:outgoing>Flow_06bjchc</bpmn:outgoing>
       <bpmn:errorEventDefinition id="ErrorEventDefinition_0pr6f58" errorRef="Error_0mfpkmo" camunda:errorMessageVariable="Error_Message" />
     </bpmn:boundaryEvent>
-    <bpmn:sequenceFlow id="Flow_0mtsgtf" sourceRef="Activity_1qxno0b" targetRef="Event_1lzyeak" />
-    <bpmn:serviceTask id="Activity_1qxno0b" name="telegram-notification">
+    <bpmn:serviceTask id="Activity_0msys0b" name="Телеграмм оповещение">
       <bpmn:extensionElements>
         <camunda:connector>
           <camunda:inputOutput>
-            <camunda:inputParameter name="url">http://poc-experience-api.gtm-esb-develop.svc.cluster.local.:7092/api/endpoint/TELEGRAM_ALERT_MESSAGE_ESB_BOT_INFO</camunda:inputParameter>
-            <camunda:inputParameter name="method">POST</camunda:inputParameter>
-            <camunda:inputParameter name="headers">
-              <camunda:map>
-                <camunda:entry key="accept">application/json</camunda:entry>
-                <camunda:entry key="Content-Type">application/json</camunda:entry>
-              </camunda:map>
-            </camunda:inputParameter>
-            <camunda:inputParameter name="payload">{"message":"Новая запись ${наименование} установлена как 'активная'. (develop-стенд)"}</camunda:inputParameter>
-          </camunda:inputOutput>
-          <camunda:connectorId>http-connector</camunda:connectorId>
-        </camunda:connector>
-      </bpmn:extensionElements>
-      <bpmn:incoming>Flow_0845bmw</bpmn:incoming>
-      <bpmn:outgoing>Flow_0mtsgtf</bpmn:outgoing>
-    </bpmn:serviceTask>
-    <bpmn:serviceTask id="Activity_0msys0b" name="telegram-error-notification">
-      <bpmn:extensionElements>
-        <camunda:connector>
-          <camunda:inputOutput>
-            <camunda:inputParameter name="url">http://poc-experience-api.svc.gtm-esb-develop.cluster.local.:8088/api/endpoint/TELEGRAM_ALERT_MESSAGE_ESB_BOT_INFO</camunda:inputParameter>
+            <camunda:inputParameter name="url">http://poc-experience-api.gtm-esb-develop.svc.cluster.local.:8088/api/endpoint/TELEGRAM_ALERT_MESSAGE_ESB_BOT_INFO</camunda:inputParameter>
             <camunda:inputParameter name="method">POST</camunda:inputParameter>
             <camunda:inputParameter name="headers">
               <camunda:map>
@@ -165,21 +137,38 @@ system.out.println('else');
     <bpmn:sequenceFlow id="Flow_06bjchc" sourceRef="Event_1h2axt1" targetRef="Activity_1s8ehok" />
     <bpmn:sequenceFlow id="Flow_0gzzj76" sourceRef="Activity_1s8ehok" targetRef="Activity_0msys0b" />
     <bpmn:sequenceFlow id="Flow_01e65se" sourceRef="Event_1aifnsh" targetRef="Activity_1s8ehok" />
-    <bpmn:userTask id="Activity_1s8ehok" name="debug error ut">
+    <bpmn:userTask id="Activity_1s8ehok" name="Анализ ошибки">
       <bpmn:incoming>Flow_06bjchc</bpmn:incoming>
       <bpmn:incoming>Flow_01e65se</bpmn:incoming>
       <bpmn:outgoing>Flow_0gzzj76</bpmn:outgoing>
     </bpmn:userTask>
     <bpmn:sequenceFlow id="Flow_1auv1ma" sourceRef="Gateway_196gcfa" targetRef="Activity_0bjuag2" />
-    <bpmn:sequenceFlow id="Flow_0845bmw" sourceRef="Activity_0bjuag2" targetRef="Activity_1qxno0b" />
+    <bpmn:sequenceFlow id="Flow_0845bmw" sourceRef="Activity_0bjuag2" targetRef="Activity_1k54os1" />
+    <bpmn:serviceTask id="Activity_1k54os1" name="Телеграм оповещение">
+      <bpmn:extensionElements>
+        <camunda:connector>
+          <camunda:inputOutput>
+            <camunda:inputParameter name="url">http://poc-experience-api.gtm-esb-develop.svc.cluster.local.:8088/api/endpoint/TELEGRAM_ALERT_MESSAGE_ESB_BOT_INFO</camunda:inputParameter>
+            <camunda:inputParameter name="method">POST</camunda:inputParameter>
+            <camunda:inputParameter name="headers">
+              <camunda:map>
+                <camunda:entry key="accept">application/json</camunda:entry>
+                <camunda:entry key="Content-Type">application/json</camunda:entry>
+              </camunda:map>
+            </camunda:inputParameter>
+            <camunda:inputParameter name="payload">{"message":"Новая запись ${наименование} установлена как 'активная'."}</camunda:inputParameter>
+          </camunda:inputOutput>
+          <camunda:connectorId>http-connector</camunda:connectorId>
+        </camunda:connector>
+      </bpmn:extensionElements>
+      <bpmn:incoming>Flow_0845bmw</bpmn:incoming>
+      <bpmn:outgoing>Flow_1ainlvy</bpmn:outgoing>
+    </bpmn:serviceTask>
+    <bpmn:sequenceFlow id="Flow_1ainlvy" sourceRef="Activity_1k54os1" targetRef="Event_1lzyeak" />
   </bpmn:process>
   <bpmn:error id="Error_0mfpkmo" name="rest_error" errorCode="rest_error" />
   <bpmndi:BPMNDiagram id="BPMNDiagram_1">
     <bpmndi:BPMNPlane id="BPMNPlane_1" bpmnElement="save-dictionary-process">
-      <bpmndi:BPMNEdge id="Flow_0mtsgtf_di" bpmnElement="Flow_0mtsgtf">
-        <di:waypoint x="1270" y="260" />
-        <di:waypoint x="1522" y="260" />
-      </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="Flow_02leupk_di" bpmnElement="Flow_02leupk">
         <di:waypoint x="800" y="235" />
         <di:waypoint x="800" y="80" />
@@ -228,7 +217,11 @@ system.out.println('else');
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="Flow_0845bmw_di" bpmnElement="Flow_0845bmw">
         <di:waypoint x="1010" y="260" />
-        <di:waypoint x="1170" y="260" />
+        <di:waypoint x="1160" y="260" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_1ainlvy_di" bpmnElement="Flow_1ainlvy">
+        <di:waypoint x="1260" y="260" />
+        <di:waypoint x="1522" y="260" />
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNShape id="_BPMNShape_StartEvent_2" bpmnElement="StartEvent_1">
         <dc:Bounds x="122" y="242" width="36" height="36" />
@@ -272,8 +265,8 @@ system.out.println('else');
       <bpmndi:BPMNShape id="Activity_0bjuag2_di" bpmnElement="Activity_0bjuag2">
         <dc:Bounds x="910" y="220" width="100" height="80" />
       </bpmndi:BPMNShape>
-      <bpmndi:BPMNShape id="Activity_0eajgw5_di" bpmnElement="Activity_1qxno0b">
-        <dc:Bounds x="1170" y="220" width="100" height="80" />
+      <bpmndi:BPMNShape id="Activity_1k54os1_di" bpmnElement="Activity_1k54os1">
+        <dc:Bounds x="1160" y="220" width="100" height="80" />
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="Event_1nk0pei_di" bpmnElement="Event_1aifnsh">
         <dc:Bounds x="452" y="282" width="36" height="36" />

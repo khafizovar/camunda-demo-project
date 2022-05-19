@@ -1,6 +1,5 @@
 package gtm.caller.mapper;
 
-import camunda.poc.domain.Group;
 import camunda.poc.domain.User;
 import gtm.caller.dto.RoleDto;
 import gtm.caller.dto.UserDto;
@@ -22,12 +21,7 @@ public class UserFacade {
         gr.setId(userDto.getUsername());
         gr.setFirstName(userDto.getUsername());
         gr.setEmail(userDto.getEmail());
-        gr.setPassword("Qwerty123");
-        return gr;
-    }
-
-    public User userDtoToUser(UserDto user, RoleDto[] rolesByUserName) {
-        User gr = this.userDtoToUser(user);
+        gr.setPassword(userDto.getPassword());
         return gr;
     }
 }

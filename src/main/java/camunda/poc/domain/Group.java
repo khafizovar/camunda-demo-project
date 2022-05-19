@@ -5,25 +5,23 @@ import lombok.Setter;
 
 import javax.persistence.*;
 
-/**
- * Created by ashlah on 28/07/17.
- */
-@Entity
-@Table(name = "`group1`")
-@Setter @Getter
+@Setter
+@Getter
 public class Group implements org.camunda.bpm.engine.identity.Group {
-
-    @Id
-//    @Column(columnDefinition = "char(36)")
-//    @GeneratedValue(generator = "system-uuid")
-//    @GenericGenerator(name = "system-uuid", strategy = "uuid2")
+    /**
+     * Идентификатор пользователя
+     */
     private String id;
-
-    @Column(name = "`name`")
+    /**
+     * Наименование группы
+     */
     private String name;
-
-    @Column(name = "`type`")
+    /**
+     * Тип группы (н-р System)
+     */
     private String type;
-
+    /**
+     * dn группы
+     */
     private String dn;
 }

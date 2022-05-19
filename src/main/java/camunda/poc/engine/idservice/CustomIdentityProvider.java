@@ -2,11 +2,14 @@ package camunda.poc.engine.idservice;
 
 import camunda.poc.service.GService;
 import camunda.poc.service.UService;
+import gtm.caller.response.SignInResponse;
+import gtm.caller.service.GtmAuthService;
 import org.camunda.bpm.engine.BadUserRequestException;
 import org.camunda.bpm.engine.identity.*;
 import org.camunda.bpm.engine.impl.context.Context;
 import org.camunda.bpm.engine.impl.identity.ReadOnlyIdentityProvider;
 import org.camunda.bpm.engine.impl.interceptor.CommandContext;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -22,9 +25,13 @@ public class CustomIdentityProvider implements ReadOnlyIdentityProvider {
 
     private GService groupService;
 
-    public CustomIdentityProvider(UService userService, GService groupService) {
+    @Autowired
+    private GtmAuthService authService;
+
+    public CustomIdentityProvider(UService userService, GService groupService, GtmAuthService authService) {
         this.userService = userService;
         this.groupService = groupService;
+        this.authService = authService;
     }
 
     // User ////////////////////////////////////////////
@@ -88,12 +95,11 @@ public class CustomIdentityProvider implements ReadOnlyIdentityProvider {
         if (userId == null || password == null || userId.isEmpty() || password.isEmpty())
             return false;
 
-        User user = findUserById(userId);
-
-        if (user == null)
-            return false;
-
-        return user.getPassword().equals(password);
+        Optional<SignInResponse> resp =  this.authService.authorize(userId, password);
+        if(resp.isPresent() && resp.get().getToken() != null) {
+            return true;
+        }
+        return false;
     }
 
     @Override

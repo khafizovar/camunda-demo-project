@@ -1,18 +1,14 @@
 package camunda.poc.engine.idservice;
 
 import org.camunda.bpm.engine.identity.Group;
-import org.camunda.bpm.engine.identity.GroupQuery;
 import org.camunda.bpm.engine.impl.GroupQueryImpl;
 import org.camunda.bpm.engine.impl.Page;
 import org.camunda.bpm.engine.impl.interceptor.CommandContext;
 import org.camunda.bpm.engine.impl.interceptor.CommandExecutor;
-import org.camunda.bpm.engine.impl.util.EnsureUtil;
 
 import java.util.List;
 
-/**
- * Created by ashlah on 28/07/17.
- */
+
 public class CustomGroupQuery extends GroupQueryImpl {
 
     public CustomGroupQuery() {

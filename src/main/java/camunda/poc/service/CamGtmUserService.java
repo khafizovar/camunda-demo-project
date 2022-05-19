@@ -28,7 +28,7 @@ public class CamGtmUserService implements UService {
     private UserFacade userFacade;
 
     public Optional<User> findById(String id) {
-        return Optional.of(userFacade.userDtoToUser(this.gtmUserService.getUser(id), gtmRoleService.getRolesByUserName(id)));
+        return Optional.of(userFacade.userDtoToUser(this.gtmUserService.getUser(id)));
     }
 
     public Collection<User> findByGroupDn(String groupDn) {

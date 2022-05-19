@@ -1,6 +1,8 @@
 package gtm.caller.service;
 
 import gtm.caller.dto.UserDto;
+import gtm.caller.feign.GtmUsersFeignClient;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.*;
@@ -16,20 +18,20 @@ import java.util.Map;
  * Created by ai.khafizov
  * on 11.02.2022
  */
+@Slf4j
 @Service
 public class GtmUserService {
     @Autowired
     private GtmAuthService authService;
-
-    @Value("${gtm.users.url}")
-    private String usersContainerUrl;
+    @Autowired
+    private GtmUsersFeignClient gtmUsersFeignClient;
 
     /**
      * Получить список пользователей
      * @return Список пользователей
      */
     public UserDto[] getUsers() {
-        return (UserDto[]) this.makeRequest(usersContainerUrl, HttpMethod.GET, UserDto[].class).getBody();
+        return this.gtmUsersFeignClient.getUsers(authService.getJwtToken());
     }
 
     /**
@@ -38,11 +40,7 @@ public class GtmUserService {
      * @return Объект пользователя
      */
     public UserDto getUser(String userName) {
-        String urlTemplate = UriComponentsBuilder.fromHttpUrl(usersContainerUrl)
-                .queryParam("userName", userName)
-                .encode()
-                .toUriString();
-        UserDto[] list = (UserDto[]) this.makeRequest(urlTemplate, HttpMethod.GET, UserDto[].class).getBody();
+        UserDto[] list = this.gtmUsersFeignClient.searchUsersByName(authService.getJwtToken(), userName);
         return (list != null && list.length > 0) ? list[0] : null;
     }
 
@@ -53,38 +51,10 @@ public class GtmUserService {
      */
     public UserDto[] getUsersByGroupDn(String groupDn) {
         try {
-//            String urlTemplate = UriComponentsBuilder.fromHttpUrl(usersContainerUrl)
-//                    .queryParam("groupName", URLEncoder.encode(groupDn, "UTF-8"))
-//                    .toUriString();
-//            String urlTemplate = UriComponentsBuilder.fromHttpUrl(usersContainerUrl).queryParam("groupName", URLEncoder.encode(groupDn, "UTF-8")).build(true).toUri().toString();
-            String urlTemplate = UriComponentsBuilder.
-                    fromHttpUrl(usersContainerUrl).
-                    queryParam("groupName", URLEncoder.encode(groupDn, "UTF-8")).
-                    build(true).toUri().toString();
-            return (UserDto[]) this.makeRequest(urlTemplate, HttpMethod.GET, UserDto[].class).getBody();
+            return this.gtmUsersFeignClient.searchUsersByGroupDn(authService.getJwtToken(), URLEncoder.encode(groupDn, "UTF-8"));
         } catch (Exception ex) {
-            System.out.println(ex.toString());
+            log.error("Ошибка вызова сервисов gtm-role по работе с пользователями", ex);
         }
         return new UserDto[0];
-    }
-
-    /**
-     * Метод формирования запроса.
-     * TODO на момент реализации POC без дженериков
-     *
-     * @param url
-     * @param method
-     * @param clazz
-     * @return
-     */
-    private ResponseEntity<?> makeRequest(String url, HttpMethod method, Class clazz) {
-        RestTemplate restTemplate = new RestTemplate();
-        HttpHeaders headers = new HttpHeaders();
-        headers.setContentType(MediaType.APPLICATION_JSON);
-        headers.setAccept(Collections.singletonList(MediaType.APPLICATION_JSON));
-        headers.setBearerAuth(authService.getJwtToken());
-        HttpEntity<Map<String, String>> request = new HttpEntity(headers);
-        ResponseEntity<?> response = restTemplate.exchange(url, HttpMethod.GET, request, clazz);
-        return response;
     }
 }

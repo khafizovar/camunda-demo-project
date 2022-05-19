@@ -3,6 +3,7 @@ package camunda.poc.engine;
 import camunda.poc.engine.idservice.CustomIdentityProviderFactory;
 import camunda.poc.service.GService;
 import camunda.poc.service.UService;
+import gtm.caller.service.GtmAuthService;
 import org.camunda.bpm.engine.ProcessEngine;
 import org.camunda.bpm.engine.impl.cfg.ProcessEngineConfigurationImpl;
 import org.camunda.bpm.engine.impl.cfg.ProcessEnginePlugin;
@@ -17,16 +18,20 @@ public class CustomIdentityProviderPlugin implements ProcessEnginePlugin {
 
     private final GService groupService;
 
+    private final GtmAuthService authService;
+
     @Autowired
     public CustomIdentityProviderPlugin(@Qualifier("UServiceGTM") UService userService,
-                                        @Qualifier("GServiceGTM") GService groupService) {
+                                        @Qualifier("GServiceGTM") GService groupService,
+                                        @Qualifier("GTMAuthService") GtmAuthService authService) {
         this.userService = userService;
         this.groupService = groupService;
+        this.authService = authService;
     }
 
     @Override
     public void preInit(ProcessEngineConfigurationImpl processEngineConfiguration) {
-        CustomIdentityProviderFactory identityProviderFactory = new CustomIdentityProviderFactory(userService, groupService);
+        CustomIdentityProviderFactory identityProviderFactory = new CustomIdentityProviderFactory(userService, groupService, authService);
         processEngineConfiguration.setIdentityProviderSessionFactory(identityProviderFactory);
     }
 
