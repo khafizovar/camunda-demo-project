@@ -40,6 +40,9 @@ camunda:
 #      default-user-permission-name-for-task: TASK_WORK
 
 gtm:
+  user: admin
+  pwd: Qwerty123
+  auth-url: http://gtm-back:8080
   auth:
     url: "http://gtm-back:8080/api/auth/signin"
   roles:
