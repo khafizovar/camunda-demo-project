@@ -44,10 +44,10 @@ camunda:
 gtm:
   user: admin
   pwd: tn$iu#cnt%demo22@
-  auth-url: http://gtm-back:8080
+  auth-url: http://172.17.0.1:8080
   auth:
-    url: "http://gtm-back:8080/api/auth/signin"
+    url: "http://172.17.0.1:8080/api/auth/signin"
   roles:
-    url: "http://gtm-back:8080/api/v1/roles/"
+    url: "http://172.17.0.1:8080/api/v1/roles/"
   users:
-    url: "http://gtm-back:8080/api/v1/ldap/users"
+    url: "http://172.17.0.1:8080/api/v1/ldap/users"
