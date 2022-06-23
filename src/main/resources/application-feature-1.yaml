@@ -1,0 +1,51 @@
+camunda.bpm:
+  #  admin-user:
+  #    id: admin
+  #    password: admin
+  deployment-resource-pattern:
+    - classpath*:**/*.bpmn
+    - classpath*:**/*.bpmn20.xml
+    - classpath*:**/*.dmn
+    - classpath*:**/*.dmn11.xml
+    - classpath*:**/*.form
+  database:
+    type: postgres
+server:
+  port: '8083'
+spring:
+  main:
+    allow-bean-definition-overriding: true
+  jpa:
+    hibernate:
+      ddl-auto: update
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.PostgreSQLDialect
+  datasource:
+    driverClassName: org.postgresql.Driver
+    #DB connection:
+    url: jdbc:postgresql://10.1.10.17:5432/cam_feature_1
+    username: postgres
+    password: h378Kj3e7pgN467f
+camunda:
+  bpm:
+    authorization:
+      enabled: true
+      tenant-check-enabled: false
+  run:
+    auth:
+      enabled: true
+#  generic-properties:
+#    properties:
+#      default-user-permission-name-for-task: TASK_WORK
+
+gtm:
+  user: admin
+  pwd: Qwerty123
+  auth-url: http://gtm-back:8080
+  auth:
+    url: "http://gtm-back:8080/api/auth/signin"
+  roles:
+    url: "http://gtm-back:8080/api/v1/roles/"
+  users:
+    url: "http://gtm-back:8080/api/v1/ldap/users"
