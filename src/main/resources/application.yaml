@@ -32,22 +32,15 @@ spring:
 camunda:
   bpm:
     authorization:
-      enabled: true
+      enabled: false
       tenant-check-enabled: false
+    filter:
+      create: All
   run:
     auth:
-      enabled: true
-#  generic-properties:
-#    properties:
-#      default-user-permission-name-for-task: TASK_WORK
+      enabled: false
 
 gtm:
   user: admin
   pwd: Qwerty123
   auth-url: http://localhost:8080
-  auth:
-    url: "http://localhost:8080/api/auth/signin"
-  roles:
-    url: "http://localhost:8080/api/v1/roles/"
-  users:
-    url: "http://localhost:8080/api/v1/ldap/users"

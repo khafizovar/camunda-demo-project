@@ -33,11 +33,6 @@ public class GtmAuthService {
      */
     @Value("${gtm.pwd}")
     private String pwd;
-    /**
-     * url авторизации
-     */
-    @Value("${gtm.auth.url}")
-    private String authSignInUrl;
 
     @Autowired
     private GtmSignInFeignClient gtmSignInFeignClient;
