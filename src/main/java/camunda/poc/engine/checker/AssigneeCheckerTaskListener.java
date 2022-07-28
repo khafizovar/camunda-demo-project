@@ -33,6 +33,9 @@ public class AssigneeCheckerTaskListener implements TaskListener {
             throw new AssigneeEmptyException(task);
         }
         if (assignee != null) {
+            if(assignee.equals(task.getAssignee())) {
+                return;
+            }
             IdentityService identityService = task.getProcessEngineServices().getIdentityService();
             UserQuery userQuery = identityService.createUserQuery().userId(assignee);
             if (userQuery.count() == 0) {
