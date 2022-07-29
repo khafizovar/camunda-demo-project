@@ -44,3 +44,7 @@ gtm:
   user: admin
   pwd: Qwerty123
   auth-url: http://localhost:8080
+
+springdoc:
+  swagger-ui:
+    path: /docs/swagger-ui
