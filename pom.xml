@@ -15,6 +15,8 @@
         <camunda.version>7.16.0</camunda.version>
         <spring.boot-version>2.6.6</spring.boot-version>
         <spring.cloud-version>2021.0.0</spring.cloud-version>
+        <swagger.annotations.version>2.1.12</swagger.annotations.version>
+        <springdoc.openapi.ui.version>1.6.4</springdoc.openapi.ui.version>
     </properties>
 
     <dependencyManagement>
@@ -46,6 +48,12 @@
     </dependencyManagement>
 
     <dependencies>
+        <dependency>
+            <groupId>org.camunda.bpm</groupId>
+            <artifactId>camunda-engine</artifactId>
+            <scope>provided</scope>
+        </dependency>
+
         <dependency>
             <groupId>org.camunda.bpm.springboot</groupId>
             <artifactId>camunda-bpm-spring-boot-starter-rest</artifactId>
@@ -155,6 +163,18 @@
             <groupId>org.postgresql</groupId>
             <artifactId>postgresql</artifactId>
             <scope>runtime</scope>
+        </dependency>
+
+        <!-- Spring docs -->
+        <dependency>
+            <groupId>io.swagger.core.v3</groupId>
+            <artifactId>swagger-annotations</artifactId>
+            <version>${swagger.annotations.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.springdoc</groupId>
+            <artifactId>springdoc-openapi-ui</artifactId>
+            <version>${springdoc.openapi.ui.version}</version>
         </dependency>
     </dependencies>
 
