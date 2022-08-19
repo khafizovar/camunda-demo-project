@@ -45,3 +45,7 @@ gtm:
   pwd: Qwerty123
   auth-url: http://gtm-back:8080
 
+springdoc:
+  swagger-ui:
+    path: /docs/swagger-ui
+
