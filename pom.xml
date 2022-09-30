@@ -15,6 +15,14 @@
         <camunda.version>7.16.0</camunda.version>
         <spring.boot-version>2.6.6</spring.boot-version>
         <spring.cloud-version>2021.0.0</spring.cloud-version>
+        <js-scriptengine.version>22.0.0</js-scriptengine.version>
+        <spring-cloud-starter-openfeign.version>3.1.0</spring-cloud-starter-openfeign.version>
+        <jaxb-impl.version>3.0.2</jaxb-impl.version>
+        <camunda-commons-logging.version>1.11.0</camunda-commons-logging.version>
+        <camunda-commons-utils.version>1.11.0</camunda-commons-utils.version>
+        <postgresql.version>42.3.7</postgresql.version>
+        <js.version>22.0.0</js.version>
+        <logbook.version>2.14.0</logbook.version>
     </properties>
 
     <dependencyManagement>
@@ -39,6 +47,13 @@
                 <groupId>org.springframework.cloud</groupId>
                 <artifactId>spring-cloud-dependencies</artifactId>
                 <version>${spring.cloud-version}</version>
+                <type>pom</type>
+                <scope>import</scope>
+            </dependency>
+            <dependency>
+                <groupId>org.zalando</groupId>
+                <artifactId>logbook-bom</artifactId>
+                <version>${logbook.version}</version>
                 <type>pom</type>
                 <scope>import</scope>
             </dependency>
@@ -70,7 +85,7 @@
         <dependency>
             <groupId>org.springframework.cloud</groupId>
             <artifactId>spring-cloud-starter-openfeign</artifactId>
-            <version>3.1.0</version>
+            <version>${spring-cloud-starter-openfeign.version}</version>
         </dependency>
 
         <dependency>
@@ -78,11 +93,16 @@
             <artifactId>spring-boot-starter-jdbc</artifactId>
         </dependency>
 
+        <dependency>
+            <groupId>org.zalando</groupId>
+            <artifactId>logbook-spring-boot-starter</artifactId>
+        </dependency>
+
         <!-- https://mvnrepository.com/artifact/com.sun.xml.bind/jaxb-impl -->
         <dependency>
             <groupId>com.sun.xml.bind</groupId>
             <artifactId>jaxb-impl</artifactId>
-            <version>3.0.2</version>
+            <version>${jaxb-impl.version}</version>
         </dependency>
 
         <dependency>
@@ -112,27 +132,27 @@
         <dependency>
             <groupId>org.camunda.commons</groupId>
             <artifactId>camunda-commons-logging</artifactId>
-            <version>1.10.0</version>
+            <version>${camunda-commons-logging.version}</version>
         </dependency>
         <dependency>
             <groupId>org.camunda.commons</groupId>
             <artifactId>camunda-commons-utils</artifactId>
-            <version>1.10.0</version>
+            <version>${camunda-commons-utils.version}</version>
         </dependency>
         <dependency>
             <groupId>org.postgresql</groupId>
             <artifactId>postgresql</artifactId>
-            <version>42.3.1</version>
+            <version>${postgresql.version}</version>
         </dependency>
         <dependency>
             <groupId>org.graalvm.js</groupId>
             <artifactId>js</artifactId>
-            <version>22.0.0</version>
+            <version>${js.version}</version>
         </dependency>
         <dependency>
             <groupId>org.graalvm.js</groupId>
             <artifactId>js-scriptengine</artifactId>
-            <version>22.0.0</version>
+            <version>${js-scriptengine.version}</version>
         </dependency>
         <dependency>
             <groupId>org.camunda.bpm</groupId>
@@ -150,11 +170,6 @@
             <groupId>org.projectlombok</groupId>
             <artifactId>lombok</artifactId>
             <optional>true</optional>
-        </dependency>
-        <dependency>
-            <groupId>org.postgresql</groupId>
-            <artifactId>postgresql</artifactId>
-            <scope>runtime</scope>
         </dependency>
     </dependencies>
 

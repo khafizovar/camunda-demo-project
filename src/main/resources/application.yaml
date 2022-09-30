@@ -40,6 +40,9 @@ camunda:
 #  generic-properties:
 #    properties:
 #      default-user-permission-name-for-task: TASK_WORK
+logging:
+  level:
+    org.zalando.logbook: TRACE
 
 gtm:
   user: admin
