@@ -23,6 +23,8 @@
         <postgresql.version>42.3.7</postgresql.version>
         <js.version>22.0.0</js.version>
         <logbook.version>2.14.0</logbook.version>
+        <swagger.annotations.version>2.1.12</swagger.annotations.version>
+        <springdoc.openapi.ui.version>1.6.4</springdoc.openapi.ui.version>
     </properties>
 
     <dependencyManagement>
@@ -61,6 +63,12 @@
     </dependencyManagement>
 
     <dependencies>
+        <dependency>
+            <groupId>org.camunda.bpm</groupId>
+            <artifactId>camunda-engine</artifactId>
+            <scope>provided</scope>
+        </dependency>
+
         <dependency>
             <groupId>org.camunda.bpm.springboot</groupId>
             <artifactId>camunda-bpm-spring-boot-starter-rest</artifactId>
@@ -132,27 +140,27 @@
         <dependency>
             <groupId>org.camunda.commons</groupId>
             <artifactId>camunda-commons-logging</artifactId>
-            <version>${camunda-commons-logging.version}</version>
+            <version>1.10.0</version>
         </dependency>
         <dependency>
             <groupId>org.camunda.commons</groupId>
             <artifactId>camunda-commons-utils</artifactId>
-            <version>${camunda-commons-utils.version}</version>
+            <version>1.10.0</version>
         </dependency>
         <dependency>
             <groupId>org.postgresql</groupId>
             <artifactId>postgresql</artifactId>
-            <version>${postgresql.version}</version>
+            <version>42.3.1</version>
         </dependency>
         <dependency>
             <groupId>org.graalvm.js</groupId>
             <artifactId>js</artifactId>
-            <version>${js.version}</version>
+            <version>22.0.0</version>
         </dependency>
         <dependency>
             <groupId>org.graalvm.js</groupId>
             <artifactId>js-scriptengine</artifactId>
-            <version>${js-scriptengine.version}</version>
+            <version>22.0.0</version>
         </dependency>
         <dependency>
             <groupId>org.camunda.bpm</groupId>
@@ -170,6 +178,18 @@
             <groupId>org.projectlombok</groupId>
             <artifactId>lombok</artifactId>
             <optional>true</optional>
+        </dependency>
+
+        <!-- Spring docs -->
+        <dependency>
+            <groupId>io.swagger.core.v3</groupId>
+            <artifactId>swagger-annotations</artifactId>
+            <version>${swagger.annotations.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.springdoc</groupId>
+            <artifactId>springdoc-openapi-ui</artifactId>
+            <version>${springdoc.openapi.ui.version}</version>
         </dependency>
     </dependencies>
 
