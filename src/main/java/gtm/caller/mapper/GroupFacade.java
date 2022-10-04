@@ -17,7 +17,7 @@ public class GroupFacade {
      */
     public Group roleToGroup(RoleDto roleDto) {
         Group gr = new Group();
-        gr.setId(roleDto.getGroupDn());
+        gr.setId(roleDto.getGroupDn().replaceAll(",", ";"));
         gr.setName(roleDto.getName());
         gr.setType("SYSTEM");
         gr.setDn(roleDto.getGroupDn());

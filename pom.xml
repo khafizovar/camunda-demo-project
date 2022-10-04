@@ -25,6 +25,7 @@
         <logbook.version>2.14.0</logbook.version>
         <swagger.annotations.version>2.1.12</swagger.annotations.version>
         <springdoc.openapi.ui.version>1.6.4</springdoc.openapi.ui.version>
+        <logback-classic.version>1.2.9</logback-classic.version>
     </properties>
 
     <dependencyManagement>
@@ -140,27 +141,27 @@
         <dependency>
             <groupId>org.camunda.commons</groupId>
             <artifactId>camunda-commons-logging</artifactId>
-            <version>1.10.0</version>
+            <version>${camunda-commons-logging.version}</version>
         </dependency>
         <dependency>
             <groupId>org.camunda.commons</groupId>
             <artifactId>camunda-commons-utils</artifactId>
-            <version>1.10.0</version>
+            <version>${camunda-commons-utils.version}</version>
         </dependency>
         <dependency>
             <groupId>org.postgresql</groupId>
             <artifactId>postgresql</artifactId>
-            <version>42.3.1</version>
+            <version>${postgresql.version}</version>
         </dependency>
         <dependency>
             <groupId>org.graalvm.js</groupId>
             <artifactId>js</artifactId>
-            <version>22.0.0</version>
+            <version>${js.version}</version>
         </dependency>
         <dependency>
             <groupId>org.graalvm.js</groupId>
             <artifactId>js-scriptengine</artifactId>
-            <version>22.0.0</version>
+            <version>${js-scriptengine.version}</version>
         </dependency>
         <dependency>
             <groupId>org.camunda.bpm</groupId>
@@ -190,6 +191,12 @@
             <groupId>org.springdoc</groupId>
             <artifactId>springdoc-openapi-ui</artifactId>
             <version>${springdoc.openapi.ui.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>ch.qos.logback</groupId>
+            <artifactId>logback-classic</artifactId>
+            <version>${logback-classic.version}</version>
         </dependency>
     </dependencies>
 
