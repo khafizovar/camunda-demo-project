@@ -18,8 +18,8 @@ public interface GtmUsersFeignClient {
     UserDto[] getUsers(@RequestHeader("Authorization") String bearerToken);
 
     @GetMapping("/api/v1/ldap/users")
-    UserDto[] searchUsersByName(@RequestHeader("Authorization") String bearerToken, @QueryParam("userName") String userName);
+    UserDto[] searchUsersByName(@RequestHeader("Authorization") String bearerToken, @org.springframework.web.bind.annotation.RequestParam("userName") String userName);
 
     @GetMapping("/api/v1/ldap/users")
-    UserDto[] searchUsersByGroupDn(@RequestHeader("Authorization") String bearerToken, @QueryParam("groupName") String groupName);
+    UserDto[] searchUsersByGroupDn(@RequestHeader("Authorization") String bearerToken, @org.springframework.web.bind.annotation.RequestParam("groupName") String groupName);
 }

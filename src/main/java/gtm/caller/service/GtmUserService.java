@@ -51,7 +51,7 @@ public class GtmUserService {
      */
     public UserDto[] getUsersByGroupDn(String groupDn) {
         try {
-            return this.gtmUsersFeignClient.searchUsersByGroupDn(authService.getJwtToken(), URLEncoder.encode(groupDn, "UTF-8"));
+            return this.gtmUsersFeignClient.searchUsersByGroupDn(authService.getJwtToken(),groupDn);
         } catch (Exception ex) {
             log.error("Ошибка вызова сервисов gtm-role по работе с пользователями", ex);
         }
