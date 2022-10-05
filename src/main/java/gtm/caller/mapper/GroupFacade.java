@@ -2,6 +2,7 @@ package gtm.caller.mapper;
 
 import camunda.poc.domain.Group;
 import gtm.caller.dto.RoleDto;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 /**
@@ -9,6 +10,7 @@ import org.springframework.stereotype.Service;
  * on 09.02.2022
  */
 @Service
+@Slf4j
 public class GroupFacade {
     /**
      * Маппинг
@@ -17,7 +19,7 @@ public class GroupFacade {
      */
     public Group roleToGroup(RoleDto roleDto) {
         Group gr = new Group();
-        gr.setId(roleDto.getGroupDn().replaceAll(",", ";"));
+        gr.setId(roleDto.getName());
         gr.setName(roleDto.getName());
         gr.setType("SYSTEM");
         gr.setDn(roleDto.getGroupDn());

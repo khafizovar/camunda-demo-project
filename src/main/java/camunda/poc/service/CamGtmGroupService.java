@@ -28,10 +28,7 @@ public class CamGtmGroupService implements GService {
 
 
     public Optional<Group> findById(String id) {
-        return this.getRoles().stream().filter(item -> {
-                    return item.getDn().equalsIgnoreCase(id);
-                }
-        ).findFirst();
+        return this.getRoles().stream().filter(item -> item.getName().equalsIgnoreCase(id)).findFirst();
     }
 
     public Collection<Group> findAll() {

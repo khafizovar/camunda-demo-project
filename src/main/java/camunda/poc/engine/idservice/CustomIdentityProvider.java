@@ -61,32 +61,37 @@ public class CustomIdentityProvider implements ReadOnlyIdentityProvider {
     }
 
     public List<User> findUserByQueryCriteria(CustomUserQuery query) {
-        Collection<camunda.poc.domain.User> users = this.userService.findAll();
-
-        if (query.getGroupId() != null) {
-            String groupId = (query.getGroupId().toLowerCase().startsWith("cn=")) ? query.getGroupId().replaceAll(";", ",") : query.getGroupId();
-            Optional<camunda.poc.domain.Group> gr = this.groupService.findById(groupId);
-            if(gr.isPresent()) {
-                List<User> us = new ArrayList<>(
-                        this.userService.findByGroupDn(gr.get().getDn()));
-                if (query.getId() != null) {
-                    us.removeIf(user -> !user.getId().equals(query.getId()));
+        if (query.getId() != null) {
+            return new ArrayList<>(this.userService.findById(query.getId()).map(user -> {
+                List<User> list = new ArrayList<>();
+                list.add(user);
+                return list;
+            }).orElseGet(ArrayList::new));
+        } else {
+            Collection<camunda.poc.domain.User> users = this.userService.findAll();
+            if (query.getGroupId() != null) {
+                Optional<camunda.poc.domain.Group> gr = this.groupService.findById(query.getGroupId());
+                if (gr.isPresent()) {
+                    List<User> us = new ArrayList<>(this.userService.findByGroupDn(gr.get().getDn()));
+                    if (query.getId() != null) {
+                        us.removeIf(user -> !user.getId().equals(query.getId()));
+                    }
+                    return us;
+                } else {
+                    return new ArrayList<>();
                 }
-                return us;
-            } else {
-                return new ArrayList<>();
             }
-        }
-        if (query.getId() != null)
-            users.removeIf(user -> !user.getId().equals(query.getId()));
-        if (query.getFirstName() != null)
-            users.removeIf(user -> !user.getFirstName().equals(query.getFirstName()));
-        if (query.getLastName() != null)
-            users.removeIf(user -> !user.getLastName().equals(query.getLastName()));
-        if (query.getEmail() != null)
-            users.removeIf(user -> !user.getEmail().equals(query.getEmail()));
+            if (query.getId() != null)
+                users.removeIf(user -> !user.getId().equals(query.getId()));
+            if (query.getFirstName() != null)
+                users.removeIf(user -> !user.getFirstName().equals(query.getFirstName()));
+            if (query.getLastName() != null)
+                users.removeIf(user -> !user.getLastName().equals(query.getLastName()));
+            if (query.getEmail() != null)
+                users.removeIf(user -> !user.getEmail().equals(query.getEmail()));
 
-        return new ArrayList<>(users);
+            return new ArrayList<>(users);
+        }
     }
 
     @Override
@@ -96,10 +101,7 @@ public class CustomIdentityProvider implements ReadOnlyIdentityProvider {
             return false;
 
         Optional<SignInResponse> resp =  this.authService.authorize(userId, password);
-        if(resp.isPresent() && resp.get().getToken() != null) {
-            return true;
-        }
-        return false;
+        return resp.isPresent() && resp.get().getToken() != null;
     }
 
     @Override
@@ -150,11 +152,11 @@ public class CustomIdentityProvider implements ReadOnlyIdentityProvider {
 
     @Override
     public void flush() {
-
+        //Работы с БД нет, поставщик gtm-role
     }
 
     @Override
     public void close() {
-
+        //Работы с БД нет, поставщик gtm-role
     }
 }
